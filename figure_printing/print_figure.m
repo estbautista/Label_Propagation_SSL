@@ -2,7 +2,7 @@
 %  Wed Oct 25 18:25:59 CEST 2017
 % 
 %  Last edited on: 
-%  Wed Nov  1 12:41:08 CET 2017
+%  Mon Dec 11 11:28:19 CET 2017
 % 
 %  Usage: print_figure(fileName,figureName,varargin)
 %  Function to plot the data stored in fileName
@@ -32,10 +32,14 @@
 %  'FontSize':	Font Size. DEFAULT: 12
 %  'LineWidth': Plot lines width. DEFAULT: 2
 %  'MarkerSize':	Marker Size. DEFAULT: 3 %
+%  'LegendPosition':	Location of the legend. DEFAULT: 'Best'
+%  'isStem'		If true then stem is plot. DEFAULT = 0
 %
 %  'Title':	Figure title. DEFAULT: no title
 %  'xlabel': 	X axis label. DEFAULT: no label
 %  'ylabel':	Y axis label. DEFAULT: no label
+%  'xlim': 	X axis limits. DEFAULT: automatic
+%  'ylim':  	Y axis limits. DEFAULT: automatic
 %
 %  OUTPUT: 
 %  saves a figure in the path given by figureName
@@ -55,6 +59,8 @@ alw = 2;
 fsz = 12;
 lw = 2;
 msz = 3;
+legendPos = 'Best';
+isStem = 0;
 
 % extract useful information for reading the file
 for i = 1 : length(varargin)
@@ -76,19 +82,23 @@ for i = 1 : length(varargin)
 	variable = varargin{i};
 	switch variable
 		case 'Width'
-			width = varargin{i+1};
+			width = str2num(varargin{i+1});
 		case 'Height'
-			height = varargin{i+1};
+			height = str2num(varargin{i+1});
 		case 'AxesLineWidth'
-			alw = varargin{i+1};
+			alw = str2num(varargin{i+1});
 		case 'FontSize'
-			fsz = varargin{i+1};
+			fsz = str2num(varargin{i+1});
 		case 'LineWidth'
-			lw = varargin{i+1};
+			lw = str2num(varargin{i+1});
 		case 'MarkerSize'
-			msz = varargin{i+1};
+			msz = str2num(varargin{i+1});
 		case 'PlotType'
 			plotType = varargin{i+1};
+		case 'LegendPosition'
+			legendPos = varargin{i+1};
+		case 'isStem'
+			isStem = 1;
 		otherwise;
 	end
 end					
@@ -98,19 +108,27 @@ fig = figure('visible','off');
 % plot accordingly to the plot specifications provided
 switch plotType
 	case 'All'
-		plot(data.data,'-o','LineWidth',lw,'MarkerSize',msz);
+		if isStem == 1
+			stem(data.data,'LineWidth',lw,'MarkerSize',msz);
+		else
+			plot(data.data,'-o','LineWidth',lw,'MarkerSize',msz);
+		end
 		num_figs = size(data.data,2);
 		var_labels = data.textdata(1,:);
 		init_fig = length(var_labels) - num_figs + 1;
-		legend(var_labels(init_fig:end),'Location','Best');	
+		legend(var_labels(init_fig:end),'Location',legendPos);	
 	case 'SomeAll'
 		var_names = varargin;
 		num_figs = size(data.data,2);
 		var_labels = data.textdata(1,:);
 		init_fig = length(var_labels) - num_figs + 1;
 		index_figs = ismember(var_labels,var_names);
-		plot(data.data(:,index_figs(init_fig:end)),'-o','LineWidth',lw,'MarkerSize',msz);
-		legend(var_labels(index_figs),'Location','Best');
+		if isStem == 1
+			stem(data.data(:,index_figs(init_fig:end)),'LineWidth',lw,'MarkerSize',msz);
+		else
+			plot(data.data(:,index_figs(init_fig:end)),'-o','LineWidth',lw,'MarkerSize',msz);
+		end
+		legend(var_labels(index_figs),'Location',legendPos);
 	case 'XY'
 		var_names = varargin;
 		index_varargin = ismember(var_names,'XY');
@@ -121,8 +139,12 @@ switch plotType
 		init_fig = length(var_labels) - num_figs + 1;
 		X_index = ismember(var_labels,X_label);
 		Y_index = ismember(var_labels,Y_label);
-		plot(data.data(:,X_index(init_fig:end)),data.data(:,Y_index(init_fig:end)),'-o','LineWidth',lw,'MarkerSize',msz);
-		legend(Y_label,'Location','Best');	
+		if isStem == 1
+			stem(data.data(:,X_index(init_fig:end)),data.data(:,Y_index(init_fig:end)),'LineWidth',lw,'MarkerSize',msz);
+		else
+			plot(data.data(:,X_index(init_fig:end)),data.data(:,Y_index(init_fig:end)),'-o','LineWidth',lw,'MarkerSize',msz);
+		end
+		legend(Y_label,'Location',legendPos);	
 	case 'MultiXY'
 		var_names = varargin;
 		num_figs = size(data.data,2);
@@ -136,8 +158,12 @@ switch plotType
 			X_data(:,i) = data.data(:,X_index(init_fig:end));
 			Y_data(:,i) = data.data(:,Y_index(init_fig:end));
 		end
-	 	plot(X_data,Y_data,'-o','LineWidth',lw,'MarkerSize',msz);
-		legend(Y_label','Location','Best');
+		if isStem == 1
+	 		stem(X_data,Y_data,'LineWidth',lw,'MarkerSize',msz);
+		else
+			plot(X_data,Y_data,'-o','LineWidth',lw,'MarkerSize',msz);
+		end
+		legend(Y_label','Location',legendPos);
 	otherwise;		
 end
 
@@ -151,6 +177,10 @@ for i = 1 : length(varargin)
 			xlabel(varargin{i+1});
 		case 'ylabel'
 			ylabel(varargin{i+1});
+		case 'ylim'
+			ylim([str2num(varargin{i+1})]);
+		case 'xlim'
+			xlim([str2num(varargin{i+1})]);
 	end
 end
 
