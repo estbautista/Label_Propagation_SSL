@@ -23,11 +23,8 @@ function A = plantedPartition_graph(N,pi,pe)
 
 N1 = N(1);
 N2 = N(2);
-A0 = eye(N1+N2);
-A0(1:N1,1:N1) = 1;
-A0(N1+1:N1+N2,N1+1:N1+N2) = 1;
 
-A = eye(N1+N2);
+A = speye(N1+N2);
 
 for n1 = 1:N1
     for n2 = n1+1:N1
@@ -41,10 +38,9 @@ for n1 = N1+1:N1+N2
     end
 end
 
-for n1 = 1:N1+N2
-    for n2 = n1+1:N1+N2
-    if A0(n1,n2)==0 && rand(1) < pe; A(n1,n2)=1; A(n2,n1)=1; end
+for n1 = 1 : N1
+    for n2 = N1 + 1 : N1 + N2;
+    if rand(1) < pe; A(n1,n2)=1; A(n2,n1)=1; end
     end
 end
 for n=1:N1+N2; A(n,n)=0; end
-
