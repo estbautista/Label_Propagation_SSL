@@ -29,7 +29,7 @@
 % AUTHORS: Paulo Goncalves, Patrice Abry, Esteban Bautista.
 % Information: estbautista@ieee.org
 
-function [TP,TN,FP,FN] = accuracy(classification,groundTruth,varargin);
+function [TP,TN,FP,FN] = accuracy(classification,groundTruth,varargin)
 measureType = 'Oracle';
 
 for i = 1 : length(varargin)
@@ -61,3 +61,4 @@ TN = numel(intersect(oracleClass2,classifClass2));
 FP = numel(intersect(oracleClass2,classifClass1));
 FN = numel(intersect(oracleClass1,classifClass2));
 
+end

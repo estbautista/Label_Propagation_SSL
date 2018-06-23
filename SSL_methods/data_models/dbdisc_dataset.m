@@ -29,7 +29,7 @@ t1 = 2*pi*rand(N(1),1);
 data1 = [r1.*cos(t1),r1.*sin(t1)];
 
 % Disc two: 
-r2 = (c-d).*rand(N(2),1) + c;
+r2 = (d-c).*rand(N(2),1) + c;
 t2 = 2*pi*rand(N(2),1);
 data2 = [r2.*cos(t2),r2.*sin(t2)];
 
