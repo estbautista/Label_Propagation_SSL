@@ -34,12 +34,15 @@
 %  'MarkerSize':	Marker Size. DEFAULT: 3 %
 %  'LegendPosition':	Location of the legend. DEFAULT: 'Best'
 %  'isStem'		If true then stem is plot. DEFAULT = 0
+%  'isLog'		If true then plot is logarithmic. DEFAULT = 0
 %
 %  'Title':	Figure title. DEFAULT: no title
 %  'xlabel': 	X axis label. DEFAULT: no label
 %  'ylabel':	Y axis label. DEFAULT: no label
 %  'xlim': 	X axis limits. DEFAULT: automatic
 %  'ylim':  	Y axis limits. DEFAULT: automatic
+%  'xLog':	X axis in logarithmic scale. DEFAULT: linear scale
+%  'yLog': 	Y axis in logarithmic scale. DEFAULT: linear scale
 %
 %  OUTPUT: 
 %  saves a figure in the path given by figureName
@@ -181,6 +184,11 @@ for i = 1 : length(varargin)
 			ylim([str2num(varargin{i+1})]);
 		case 'xlim'
 			xlim([str2num(varargin{i+1})]);
+		case 'xLog'
+			set(gca, 'XScale', 'log');
+		case 'yLog'
+			set(gca, 'YScale', 'log');
+		otherwise;
 	end
 end
 
