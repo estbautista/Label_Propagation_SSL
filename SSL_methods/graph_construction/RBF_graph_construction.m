@@ -25,23 +25,19 @@ function [A] = RBF_graph_construction(data,KNN,sigma)
 N = size(data,1);        
 TempA = zeros(N);          
 for i = 1 : N
-    for j = 1 : N
-        TempA(i,j) = exp((-norm(data(i,:)-data(j,:),2)^2)/sigma^2); 
+    for j = i + 1 : N
+        sim = exp((-norm(data(i,:)-data(j,:),2)^2)/sigma^2); 
+        TempA(i,j) = sim; TempA(j,i) = sim;
     end
 end
-TempA = TempA - diag(diag(TempA)); 
 
 % Prune the graph let the KNN nearest neighbors rest connected 
 A = zeros(N);
+KNN = uint32(round(KNN));
 for i = 1 : N
     [sortA,index] = sort(TempA(i,:),'descend');
-    sortA(uint32(round(KNN))+1:N) = 0;
-    A(i,index) = sortA;
+    A(i,index(1:KNN)) = sortA(1:KNN);
+    A(index(1:KNN),i) = sortA(1:KNN);
 end
-for i = 1 : N
-    index = find(A(i,:) == 0);
-    A(i,index) = A(index,i);
-    index = find(A(:,1) == 0);
-    A(index,i) = A(i,index);
-end
+
 end
