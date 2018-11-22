@@ -19,28 +19,36 @@
 % AUTHORS: Paulo Goncalves, Patrice Abry, Esteban Bautista.
 % Information: estbautista@ieee.org
 
-function A = plantedPartition_graph(N,pi,pe)
+function A = sparsePlantedPartition_graph(N,pi,pe)
 
 N1 = N(1);
 N2 = N(2);
+rows = []; cols = [];
 
-A = speye(N1+N2);
-
-for n1 = 1:N1
-    for n2 = n1+1:N1
-    if rand(1)<pi(1); A(n1,n2)=1; A(n2,n1)=1; end
-    end
+parfor n1 = 1:N1
+    randvect = rand(N1-n1,1);
+    idx = n1 + find(randvect < pi(1));
+    nonzeros = length(idx);
+    cols = [cols; n1*ones(nonzeros,1)];
+    rows = [rows; idx];
 end
 
-for n1 = N1+1:N1+N2
-    for n2 = n1+1:N1+N2
-    if rand(1)<pi(2); A(n1,n2)=1; A(n2,n1)=1; end
-    end
+parfor n1 = N1+1:N1+N2
+    randvect = rand(N1+N2-n1,1);
+    idx = n1 + find(randvect < pi(2));
+    nonzeros = length(idx);
+    cols = [cols; n1*ones(nonzeros,1)];
+    rows = [rows; idx];
 end
 
-for n1 = 1 : N1
-    for n2 = N1 + 1 : N1 + N2;
-    if rand(1) < pe; A(n1,n2)=1; A(n2,n1)=1; end
-    end
+parfor n1 = 1 : N1
+    randvect = rand(N2,1);
+    idx = N1 + find(randvect < pe);
+    nonzeros = length(idx);
+    cols = [cols; n1*ones(nonzeros,1)];
+    rows = [rows; idx];
 end
-for n=1:N1+N2; A(n,n)=0; end
+
+A = sparse(rows,cols,ones(length(rows),1),sum(N),sum(N));
+A = A + sparse(cols,rows,ones(length(rows),1),sum(N),sum(N));
+A = A - diag(diag(A));
