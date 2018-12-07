@@ -1,4 +1,4 @@
-function [MCC,hs] = PageRank_sweep(Lap,mu,y,gT)
+function [MCC,hs,sweep] = PageRank_sweep(Lap,mu,y,gT)
 
 % PageRank operator 
 Deg = diag(diag(Lap));
