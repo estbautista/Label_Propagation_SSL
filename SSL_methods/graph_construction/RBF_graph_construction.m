@@ -2,7 +2,7 @@
 % Tue Oct 24 17:30:08 CEST 2017
 %
 % Last edited on: 
-% Tue Oct 24 17:30:20 CEST 2017
+% Sat Feb  2 23:50:02 CET 2019
 %
 % Usage: A = RBF_graph_construction(data,KNN,sigma)
 % Function to build a graph using the Radial Basis Function Kernel 
@@ -25,8 +25,10 @@ function [A] = RBF_graph_construction(data,KNN,sigma)
 N = size(data,1);        
 TempA = zeros(N);          
 for i = 1 : N
+    data_i = data(i,:);
     for j = i + 1 : N
-        sim = exp((-norm(data(i,:)-data(j,:),2)^2)/sigma^2); 
+        data_j = data(j,:);
+        sim = exp((-norm(data_i-data_j,2)^2)/sigma^2); 
         TempA(i,j) = sim; TempA(j,i) = sim;
     end
 end

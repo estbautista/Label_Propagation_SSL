@@ -4,9 +4,9 @@
 % Last edited on: 
 % Tue Oct 24 16:25:49 CEST 2017
 %
-% Usage: A = plantedPartition_graph(N,pi,pe);
-% Function to build and adjacency matrix that follows the planted partition
-% graph model
+% Usage: A = sparsePlantedPartition_graph(N,pi,pe);
+% Function to build an sparse adjacency matrix that follows the planted 
+% partition graph model. The function employs paralell boucles
 %
 % INPUT: 
 % N = [N(1),N(2)]: two entries vector giving the total points of each class 
