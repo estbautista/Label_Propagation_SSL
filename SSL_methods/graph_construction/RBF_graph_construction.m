@@ -24,14 +24,16 @@ function [A] = RBF_graph_construction(data,KNN,sigma)
 % Compute the weights for every pair of nodes using the RBF kernel
 N = size(data,1);        
 TempA = zeros(N);          
-for i = 1 : N
+parfor i = 1 : N
     data_i = data(i,:);
+    sim = zeros(N,1);
     for j = i + 1 : N
         data_j = data(j,:);
-        sim = exp((-norm(data_i-data_j,2)^2)/sigma^2); 
-        TempA(i,j) = sim; TempA(j,i) = sim;
+        sim(j) = exp((-norm(data_i-data_j,2)^2)/sigma^2); 
     end
+    TempA(i,:) = sim;
 end
+TempA = TempA + TempA';
 
 % Prune the graph let the KNN nearest neighbors rest connected 
 A = zeros(N);

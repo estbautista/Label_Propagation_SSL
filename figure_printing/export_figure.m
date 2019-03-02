@@ -6,7 +6,7 @@
 % AUTHORS: Paulo Goncalves, Patrice Abry, Esteban Bautista.
 % Information: estbautista@ieee.org
 
-function export_figure(fig,fileName,varargin);
+function export_figure(fig,fileName,varargin)
 
 if isempty(varargin)
 	fig_par.width = 5;

@@ -15,7 +15,7 @@ pr = mu*(Op\y);
 sweep = zeros(N-1,1);
 [~, idx_pr] = sort(pr./diag(Deg),'descend');
 for i = 1 : N - 1
-    indic = zeros(N,1); indic(idx_pr(1:i)) = 1;
+    indic = indic_fun(N,idx_pr(1:i));
     sweep(i) = Cheeger_ratio(Lap,indic);
 end
 [hs, min_idx] = min(sweep);
